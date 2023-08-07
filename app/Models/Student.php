@@ -9,7 +9,7 @@ class Student extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'name',
         'email',
         'address',
@@ -17,4 +17,14 @@ class Student extends Model
         'section_id',
         'klass_id',
     ];
+
+    public function klass()
+    {
+        return $this->belongsTo(Klass::class, 'klass_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
 }
