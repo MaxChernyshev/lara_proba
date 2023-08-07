@@ -17,4 +17,14 @@ class Klass extends Model
     {
         return $this->hasMany(Section::class, 'klass_id');
     }
+
+//    public function klass()
+//    {
+//        return $this->hasMany(Section::class);
+//    }
+
+    public function klass()
+    {
+        return $this->belongsTo(Klass::class, 'klass_id');
+    }
 }
