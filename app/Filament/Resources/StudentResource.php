@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Exports\StudentsExport;
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Klass;
@@ -18,6 +19,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use PHPUnit\TextUI\Output\Default\UnexpectedOutputPrinter;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Actions\DeleteBulkAction;
 
 class StudentResource extends Resource
 {
@@ -109,8 +113,15 @@ class StudentResource extends Resource
                 Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()
+                DeleteBulkAction::make('delete')
+                    ->icon('heroicon-o-adjustments')
                     ->label('delete selected'),
+
+                BulkAction::make('export')
+                    ->label('export selected to excel')
+                    ->icon('heroicon-o-adjustments')
+                    ->action(fn(Collection $records) => (new StudentsExport($records))->download(now() . 'students.xlsx'))
+                    ->deselectRecordsAfterCompletion()
             ]);
     }
 
